@@ -20,6 +20,11 @@ export const useEpisodeStore = defineStore('episode', {
       if (response.status == 200) {
         const data = response.data;
         this.epList = data;
+        this.storeState = apiState.LOADED;
+      } else if (response.status == 404) {
+        this.epList = [];
+        this.epInfo = {};
+        this.storeState = apiState.LOADED;
       } else {
         this.storeState = apiState.ERROR;
         this.storeMsgError = 'Não foi possível realizar a busca dos episódios.';

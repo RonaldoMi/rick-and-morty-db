@@ -13,19 +13,19 @@ export const useCharacterStore = defineStore('character', {
   }),
 
   actions: {
-    async [FETCH_CHARACTER](page = 1, name = undefined, status = undefined) {
+    async [FETCH_CHARACTER](params = {}) {
       this.storeState = apiState.LOADING;
-      const params = {
-        page,
-        name,
-        status,
-      };
-      const response = await getCharacter(params);
 
+      const response = await getCharacter(params);
       if (response.status == 200) {
         const data = response.data;
         this.charList = data.results;
         this.charInfo = data.info;
+        this.storeState = apiState.LOADED;
+      } else if (response.status == 404) {
+        this.charList = [];
+        this.charInfo = {};
+        this.storeState = apiState.LOADED;
       } else {
         this.storeState = apiState.ERROR;
         this.storeMsgError =
