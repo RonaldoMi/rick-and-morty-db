@@ -186,6 +186,7 @@ watch(epList, () => {
 });
 watch(statusSearch, () => {
   try {
+    resetPage();
     characterStore.FETCH_CHARACTER(charParams.value);
   } catch (error) {
     console.warn('Watch:statusSearch -> ', error);
@@ -202,9 +203,13 @@ const handleSearchInput = () => {
 };
 
 const delayedSearch = debounce(() => {
-  currentPage.value = 1;
+  resetPage();
   characterStore.FETCH_CHARACTER(charParams.value);
 }, 700);
+
+const resetPage = () => {
+  currentPage.value = 1;
+};
 </script>
 <style scoped>
 .hero-section {
