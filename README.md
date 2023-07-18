@@ -2,6 +2,10 @@
 
 Este projeto é uma base de dados de personagens do Rick and Morty, onde é possível filtrar os personagens por nome e status. Além disso, o sistema possui uma funcionalidade de paginação para melhorar a experiência do usuário.
 
+## Demonstração
+
+Confira a [demo online](https://rick-and-morty-db-mu.vercel.app/) hospedada no Vercel.
+
 ## Tecnologias Utilizadas
 
 - Vue 3: Utilizamos a versão mais recente do Vue.js para desenvolver este projeto, aproveitando os recursos modernos e eficientes do framework.
