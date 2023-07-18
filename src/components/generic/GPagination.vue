@@ -50,7 +50,7 @@
 </template>
 
 <script setup>
-import { ref, computed, watch, defineEmits } from 'vue';
+import { computed, defineEmits } from 'vue';
 
 const props = defineProps({
   currentPage: {
@@ -82,42 +82,37 @@ const props = defineProps({
 
 const emit = defineEmits(['update:currentPage']);
 
-const currentPage = ref(props.currentPage);
-
 const previousPage = () => {
-  if (currentPage.value > 1 && !props.disabled) {
-    currentPage.value--;
-    emit('update:currentPage', currentPage.value);
+  if (props.currentPage > 1 && !props.disabled) {
+    emit('update:currentPage', props.currentPage - 1);
   }
 };
 
 const nextPage = () => {
-  if (currentPage.value < props.totalPages && !props.disabled) {
-    currentPage.value++;
-    emit('update:currentPage', currentPage.value);
+  if (props.currentPage < props.totalPages && !props.disabled) {
+    emit('update:currentPage', props.currentPage + 1);
   }
 };
 
 const goToPage = (page) => {
-  if (page != currentPage.value && !props.disabled) {
-    currentPage.value = page;
-    emit('update:currentPage', currentPage.value);
+  if (page != props.currentPage && !props.disabled) {
+    emit('update:currentPage', page);
   }
 };
 
 const showToStartPage = () => {
-  return currentPage.value - Math.floor(props.displayLimit / 2) > 1;
+  return props.currentPage - Math.floor(props.displayLimit / 2) > 1;
 };
 
 const showToEndPage = () => {
   return (
-    currentPage.value + Math.floor(props.displayLimit / 2) < props.totalPages
+    props.currentPage + Math.floor(props.displayLimit / 2) < props.totalPages
   );
 };
 
 const displayedPages = computed(() => {
   const total = props.totalPages;
-  const current = currentPage.value;
+  const current = props.currentPage;
   const limit = props.displayLimit;
 
   const middle = Math.floor(limit / 2);
@@ -136,13 +131,6 @@ const displayedPages = computed(() => {
 
   return Array.from({ length: end - start + 1 }, (_, index) => start + index);
 });
-
-watch(
-  () => props.currentPage,
-  (newVal) => {
-    currentPage.value = newVal;
-  }
-);
 </script>
 
 <style scoped>
