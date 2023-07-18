@@ -1,5 +1,5 @@
 <template>
-  <div style="height: 100vh; width: 100vw">
+  <div style="height: 100vh">
     <g-nav />
 
     <section class="hero-section">
@@ -40,7 +40,13 @@
     </section>
 
     <section class="content-section">
-      <div class="content-section-card">
+      <h1 v-if="!loadingChar && charList.length === 0" class="gray-text">
+        Nenhum personagem encontrado ;(
+      </h1>
+      <div
+        v-if="!loadingChar && charList.length > 0"
+        class="content-section-card"
+      >
         <g-card
           v-for="char in charList"
           :key="char.id"
@@ -92,12 +98,15 @@
         />
       </div>
     </section>
+
+    <g-footer />
   </div>
 </template>
 
 <script setup>
 import GCard from '@/components/generic/GCard.vue';
 import GNav from '@/components/generic/GNav.vue';
+import GFooter from '@/components/generic/GFooter.vue';
 import GPagination from '@/components/generic/GPagination.vue';
 import GInput from '@/components/generic/GInput.vue';
 import GSelect from '@/components/generic/GSelect.vue';
@@ -143,6 +152,7 @@ const totalPages = computed(() => characterStore.charInfo.pages);
 const charParams = computed(() => ({
   name: charSearch.value,
   page: currentPage.value,
+  status: statusSearch.value,
 }));
 
 watch(charList, () => {
@@ -172,6 +182,13 @@ watch(epList, () => {
     }
   } catch (error) {
     console.warn('Watch:epList -> ', error);
+  }
+});
+watch(statusSearch, () => {
+  try {
+    characterStore.FETCH_CHARACTER(charParams.value);
+  } catch (error) {
+    console.warn('Watch:statusSearch -> ', error);
   }
 });
 
