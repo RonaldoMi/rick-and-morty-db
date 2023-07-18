@@ -7,6 +7,23 @@
       <h1 class="hero-section-title">The Rick and Morty API</h1>
     </section>
 
+    <section class="custom-section-menu">
+      <div class="custom-section-menu-search">
+        <icon-search
+          style="margin-right: 8px"
+          height="35px"
+          width="35px"
+          color="white"
+        />
+        <g-input
+          v-model="charSearch"
+          label="Nome do Personagem"
+          :loading="loadingChar"
+          @input="handleSearchInput"
+        />
+      </div>
+    </section>
+
     <section class="content-section">
       <div class="content-section-card">
         <g-card
@@ -67,30 +84,43 @@
 import GCard from '@/components/generic/GCard.vue';
 import GNav from '@/components/generic/GNav.vue';
 import GPagination from '@/components/generic/GPagination.vue';
+import GInput from '@/components/generic/GInput.vue';
+
 import IconRickAndMorty from '@/components/icons/IconRickAndMorty.vue';
+import IconSearch from '@/components/icons/IconSearch.vue';
 import StatusIcon from '@/components/StatusIcon.vue';
+
 import { useCharacterStore } from '@/stores/character';
 import { useEpisodeStore } from '@/stores/episode';
 import { onMounted, computed, ref, watch } from 'vue';
-
-const characterStore = useCharacterStore();
-const episodeStore = useEpisodeStore();
+import { debounce } from 'lodash';
+import apiState from '../api/apiStates';
 
 onMounted(() => {
   characterStore.FETCH_CHARACTER();
 });
+
+const characterStore = useCharacterStore();
+const episodeStore = useEpisodeStore();
 
 const statusList = ref({
   Alive: 'rgb(85, 204, 68)',
   Unknown: 'rgb(158, 158, 158)',
   Dead: 'rgb(214, 61, 46)',
 });
+const currentPage = ref(1);
+const charSearch = ref('');
 
 const charList = computed(() => characterStore.charList);
 const epList = computed(() => episodeStore.epList);
+const loadingChar = computed(
+  () => characterStore.storeState === apiState.LOADING
+);
 const totalPages = computed(() => characterStore.charInfo.pages);
-
-const currentPage = ref(1);
+const charParams = computed(() => ({
+  name: charSearch.value,
+  page: currentPage.value,
+}));
 
 watch(charList, () => {
   try {
@@ -106,21 +136,35 @@ watch(charList, () => {
 });
 watch(epList, () => {
   try {
-    epList.value.forEach((ep) => {
-      const chars = charList.value.filter((char) => ep.url === char.episode[0]);
+    if (Array.isArray(epList.value)) {
+      epList.value.forEach((ep) => {
+        const chars = charList.value.filter(
+          (char) => ep.url === char.episode[0]
+        );
 
-      chars.forEach((fChar) => {
-        fChar['firstSeen'] = ep.name;
+        chars.forEach((fChar) => {
+          fChar['firstSeen'] = ep.name;
+        });
       });
-    });
+    }
   } catch (error) {
     console.warn('Watch:epList -> ', error);
   }
 });
 
 const goToPage = (page) => {
-  characterStore.FETCH_CHARACTER(page);
+  currentPage.value = page;
+  characterStore.FETCH_CHARACTER(charParams.value);
 };
+
+const handleSearchInput = () => {
+  delayedSearch();
+};
+
+const delayedSearch = debounce(() => {
+  currentPage.value = 1;
+  characterStore.FETCH_CHARACTER(charParams.value);
+}, 700);
 </script>
 <style scoped>
 .hero-section {
@@ -160,6 +204,21 @@ const goToPage = (page) => {
   max-width: 1920px;
   -webkit-box-pack: center;
   -webkit-box-align: center;
+}
+.custom-section-menu {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding-top: 1rem;
+  background: rgba(39, 43, 51, 1);
+  -webkit-box-align: center;
+  -webkit-box-pack: center;
+}
+.custom-section-menu-search {
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 @media (max-width: 55.625em) {
   .hero-section-title {
