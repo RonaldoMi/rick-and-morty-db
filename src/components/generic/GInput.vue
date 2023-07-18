@@ -28,7 +28,7 @@
 <script setup>
 import IconLoading from '@/components/icons/IconLoading.vue';
 
-import { ref, defineProps, defineEmits } from 'vue';
+import { ref } from 'vue';
 
 const emit = defineEmits(['update:modelValue']);
 
