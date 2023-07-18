@@ -66,7 +66,7 @@ const handleInput = (value) => {
 .search-input {
   display: inline-block;
   position: relative;
-  width: 300px;
+  width: 100%;
 }
 
 .search-input__input {
