@@ -17,9 +17,24 @@
         />
         <g-input
           v-model="charSearch"
-          label="Nome do Personagem"
+          label="Character Name"
           :loading="loadingChar"
           @input="handleSearchInput"
+        />
+      </div>
+
+      <div class="custom-section-menu-search">
+        <icon-search
+          style="margin-right: 8px"
+          height="35px"
+          width="35px"
+          color="white"
+        />
+        <g-select
+          v-model="statusSearch"
+          label="Character Status"
+          :loading="loadingChar"
+          :items="statusList"
         />
       </div>
     </section>
@@ -43,7 +58,7 @@
               </a>
               <status-icon
                 :label="`${char.status} - ${char.species}`"
-                :color="statusList[char.status]"
+                :color="statusColor[char.status]"
               />
             </div>
           </template>
@@ -85,6 +100,7 @@ import GCard from '@/components/generic/GCard.vue';
 import GNav from '@/components/generic/GNav.vue';
 import GPagination from '@/components/generic/GPagination.vue';
 import GInput from '@/components/generic/GInput.vue';
+import GSelect from '@/components/generic/GSelect.vue';
 
 import IconRickAndMorty from '@/components/icons/IconRickAndMorty.vue';
 import IconSearch from '@/components/icons/IconSearch.vue';
@@ -103,13 +119,20 @@ onMounted(() => {
 const characterStore = useCharacterStore();
 const episodeStore = useEpisodeStore();
 
-const statusList = ref({
+const statusColor = ref({
   Alive: 'rgb(85, 204, 68)',
   Unknown: 'rgb(158, 158, 158)',
   Dead: 'rgb(214, 61, 46)',
 });
 const currentPage = ref(1);
 const charSearch = ref('');
+const statusSearch = ref('');
+const statusList = ref([
+  { text: 'All', value: '' },
+  { text: 'Alive', value: 'alive' },
+  { text: 'Dead', value: 'dead' },
+  { text: 'Unknown', value: 'unknown' },
+]);
 
 const charList = computed(() => characterStore.charList);
 const epList = computed(() => episodeStore.epList);
@@ -207,7 +230,7 @@ const delayedSearch = debounce(() => {
 }
 .custom-section-menu {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   justify-content: center;
   align-items: center;
   padding-top: 1rem;
@@ -219,6 +242,9 @@ const delayedSearch = debounce(() => {
   display: flex;
   justify-content: center;
   align-items: center;
+  width: 300px;
+  padding-right: 0.5vw;
+  padding-left: 0.5vw;
 }
 @media (max-width: 55.625em) {
   .hero-section-title {
@@ -228,6 +254,18 @@ const delayedSearch = debounce(() => {
 @media (max-width: 40.625em) {
   .hero-section-title {
     font-size: 3.125rem;
+  }
+  .custom-section-menu-search {
+    width: 100%;
+    padding-right: 5vw;
+    padding-left: 5vw;
+  }
+  .custom-section-menu {
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    -webkit-box-align: center;
+    -webkit-box-pack: center;
   }
 }
 </style>
