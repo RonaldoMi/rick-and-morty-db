@@ -2,13 +2,12 @@
   <div
     class="loading"
     :style="`width: ${size}; height: ${size}; 
-             border-top: 4px solid ${color};`"
+             border-top: 4px solid;
+             border-top-color: ${color}`"
   />
 </template>
 
 <script setup>
-import { defineProps } from 'vue';
-
 defineProps({
   size: {
     type: String,
