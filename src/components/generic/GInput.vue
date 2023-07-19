@@ -16,7 +16,7 @@
       @blur="isInputActive = modelValue !== ''"
     />
     <div v-if="loading" class="search-input__loading">
-      <icon-loading :color="color" />
+      <icon-loading id="icon-loading" :color="color" />
     </div>
     <div
       class="search-input__underline"
