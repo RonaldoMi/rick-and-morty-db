@@ -30,7 +30,9 @@ describe('<GInput />', () => {
   it('Render expected label', () => {
     const labelValue = 'Exemple label';
 
-    cy.contains('label', labelValue).should('be.visible');
+    cy.get('.search-input__label')
+      .should('be.visible')
+      .and('contain', labelValue);
   });
 
   it('Render expected input type', () => {
@@ -73,7 +75,6 @@ describe('<GInput />', () => {
   it('Render focus effect', () => {
     const inputValue = '123';
 
-    // Para focar o input
     cy.get('.search-input__label.active').should('not.exist');
     cy.get('@inputEl').type(inputValue);
     cy.get('.search-input__label.active').should('exist');
