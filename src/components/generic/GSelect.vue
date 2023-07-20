@@ -23,6 +23,7 @@
       </option>
     </select>
     <icon-expand
+      id="icon-expand"
       height="1.5rem"
       width="1.5rem"
       class="select-arrow-icon"
@@ -30,7 +31,7 @@
       :class="{ active: isSelectActive }"
     />
     <div v-if="loading" class="select-loading">
-      <icon-loading :color="color" />
+      <icon-loading id="icon-loading" :color="color" />
     </div>
   </div>
 </template>
@@ -102,7 +103,6 @@ const updateSelect = (event) => {
   top: 50%;
   right: 12px;
   transform: translateY(-50%);
-  pointer-events: none;
   transition: transform 0.2s ease;
 }
 .select-arrow-icon.active {
