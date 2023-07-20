@@ -14,6 +14,10 @@ Confira a [demo online](https://rick-and-morty-db-mu.vercel.app/) hospedada no V
 
 - Pinia: Para gerenciar o estado global da aplicação, optamos por utilizar o Pinia, uma biblioteca de gerenciamento de estado simples e poderosa projetada para o Vue.js 3.
 
+- Axios: Utilizamos o Axios como cliente HTTP para fazer requisições à API do Rick and Morty e obter os dados dos personagens.
+
+- CSS: Utilizamos o CSS para estilizar a interface do aplicativo, garantindo uma apresentação visual agradável e responsiva.
+
 - ESLint e Prettier: Utilizamos o ESLint para garantir que nosso código esteja em conformidade com as boas práticas e padrões de codificação. Além disso, o Prettier foi configurado para garantir a formatação consistente do código.
 
 ## Configuração Recomendada do IDE
@@ -32,4 +36,12 @@ Para iniciar o projeto, execute o seguinte comando:
 
 ```sh
 npm install
+```
+
+## Utilizando Cypress
+
+Para iniciar o teste, execute o seguinte comando:
+
+```sh
+npx cypress run
 ```
